@@ -1,8 +1,8 @@
 #Initialise vars
 $ResourceGroup = "PS_Cloud-Gaming"
 $Location = "australiaeast"
-$Image = "Gaming-Template-Small"
-$VMSizes = ""
+$ImageId = "/subscriptions/50248d07-cf32-4323-be00-c0db0e8eb9f0/resourceGroups/AUS_CloudGaming/providers/Microsoft.Compute/galleries/GamingImageShare/images/Gaming-Template"
+$VMSizes = "Standard_B2ms", "Standard_NV6_Promo"
 
 #Scripts
 $VMStartScript = "startvm.ps1"
@@ -29,7 +29,8 @@ $creds = Get-Credential -Message "Choose your login credentials for the VM"
 
 $VMName = Read-Host -Prompt "What do you want to call your VM?"
 
-$GameDiskSizeGB = [int]Read-Host -Prompt "How many GB do you need for your VM Game drive? Nearest power of two recommended."
+$GameDiskSizeGB = Read-Host -Prompt "How many GB do you need for your VM Game drive? Nearest power of two recommended."
+$GameDiskSizeGB = [int]$GameDiskSizeGB
 
 #Create Resource Group
 New-AzResourceGroup -Name $ResourceGroup -Location $Location
@@ -38,9 +39,8 @@ while (1) {
     $input = Read-Host -Prompt "Enter command"
 
     if($input -eq "exit"){
-        if((Read-Host -Prompt "Do you want to delete resources created by this script? (Recommended)") -contains "n","N")Remove-AzResourceGroup -Name $ResourceGroup
+        if((Read-Host -Prompt "Do you want to delete resources created by this script? (y Recommended) y/n") -eq "y"){Remove-AzResourceGroup -Name $ResourceGroup}
         Write-Output "Always check the azure portal resource groups a couple minutes after this script has ended for leftover resources"
-        Write-Output "Get-AzImage -ImageName `"Gaming-Template-Small`""
         exit
     }
     elseif ($input -eq "list-vars"){
@@ -48,6 +48,7 @@ while (1) {
         Get-Variable -Scope 0
     }
     elseif ($input -eq "Start Setup VM") {
+        $VMNo = 0
         Invoke-Expression -Command $PSScriptRoot/$VMStartScript
     }
     else {
