@@ -1,7 +1,9 @@
+$brandName = "Cloudy-Gaming"
+
 #Initialise vars
-$ResourceGroup = "PS_Cloud-Gaming"
+$ResourceGroup = "PS_$brandName"
 $Location = "australiaeast"
-$ImageId = "/subscriptions/50248d07-cf32-4323-be00-c0db0e8eb9f0/resourceGroups/AUS_CloudGaming/providers/Microsoft.Compute/galleries/GamingImageShare/images/Gaming-Template"
+$ImageId = "/subscriptions/50248d07-cf32-4323-be00-c0db0e8eb9f0/resourceGroups/AUS_CloudGaming/providers/Microsoft.Compute/images/Gaming-Template-Small"
 $VMSizes = "Standard_B2ms", "Standard_NV6_Promo"
 
 #Scripts
@@ -27,7 +29,7 @@ Write-Output "`n`nMake sure to keep your login credentials elsewhere"
 Write-Output "And make sure your password is compatible with windows server policy: https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/password-must-meet-complexity-requirements"
 $creds = Get-Credential -Message "Choose your login credentials for the VM"
 
-$VMName = Read-Host -Prompt "What do you want to call your VM?"
+$VMName = Read-Host -Prompt "What do you want to call your VM? (Only alpanumeric characters!)"
 
 $GameDiskSizeGB = Read-Host -Prompt "How many GB do you need for your VM Game drive? Nearest power of two recommended."
 $GameDiskSizeGB = [int]$GameDiskSizeGB
@@ -55,6 +57,8 @@ while (1) {
         #Help message
         "Available commands:"
         "Main:"
+        "   Start Setup VM"
         "Debug:"
+        "   list-vars"
     }
 }
