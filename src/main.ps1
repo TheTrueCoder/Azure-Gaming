@@ -1,10 +1,10 @@
-$brandName = "Cloudy-Gaming"
+$brandName = "NCloud"
 
 #Initialise vars
 $ResourceGroup = "PS_$brandName"
 $Location = "australiaeast"
 $ImageId = "/subscriptions/50248d07-cf32-4323-be00-c0db0e8eb9f0/resourceGroups/AUS_CloudGaming/providers/Microsoft.Compute/images/Gaming-Template-Small"
-$VMSizes = "Standard_B2ms", "Standard_NV6_Promo"
+$VMSizes = "Standard_B2ms", "Standard_NV6"
 
 #Scripts
 $VMStartScript = "startvm.ps1"
