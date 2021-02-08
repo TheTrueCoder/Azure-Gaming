@@ -38,18 +38,18 @@ $GameDiskSizeGB = [int]$GameDiskSizeGB
 New-AzResourceGroup -Name $ResourceGroup -Location $Location
 
 while (1) {
-    $input = Read-Host -Prompt "Enter command"
+    $response = Read-Host -Prompt "Enter command"
 
-    if($input -eq "exit"){
+    if($response -eq "exit"){
         if((Read-Host -Prompt "Do you want to delete resources created by this script? (y Recommended) y/n") -eq "y"){Remove-AzResourceGroup -Name $ResourceGroup}
         Write-Output "Always check the azure portal resource groups a couple minutes after this script has ended for leftover resources"
         exit
     }
-    elseif ($input -eq "list-vars"){
+    elseif ($response -eq "list-vars"){
         #Lists all variables for debugging
         Get-Variable -Scope 0
     }
-    elseif ($input -eq "Start Setup VM") {
+    elseif ($response -eq "Start Setup VM") {
         $VMNo = 0
         Invoke-Expression -Command $PSScriptRoot/$VMStartScript
     }
