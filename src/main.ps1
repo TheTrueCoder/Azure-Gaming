@@ -7,7 +7,7 @@ $ImageId = "/subscriptions/50248d07-cf32-4323-be00-c0db0e8eb9f0/resourceGroups/A
 $VMSizes = "Standard_B2ms", "Standard_NV6"
 
 #Scripts
-$VMStartScript = "startvm.ps1"
+$VMStartScript = "startTemplate.ps1"
 
 #------------------------------------/
 
@@ -27,7 +27,9 @@ if ($AvalInst -match "NV6" -and $AvalInst -match "B2s")
 #Get Credentials
 Write-Output "`n`nMake sure to keep your login credentials elsewhere"
 Write-Output "And make sure your password is compatible with windows server policy: https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/password-must-meet-complexity-requirements"
-$creds = Get-Credential -Message "Choose your login credentials for the VM"
+#$creds = Get-Credential -Message "Choose your login credentials for the VM"
+$LoginName = Read-Host -Prompt "Choose a Username"
+$LoginPassword = Read-Host -Prompt "Choose a Password"
 
 $VMName = Read-Host -Prompt "What do you want to call your VM? (Only alpanumeric characters!)"
 
