@@ -6,7 +6,7 @@
             "value": "australiaeast"
         },
         "networkInterfaceName": {
-            "value": "ncloudvm410"
+            "value": "ncloudvm-nic"
         },
         "networkSecurityGroupName": {
             "value": "NCloudVM-nsg"
@@ -34,34 +34,10 @@
         "virtualNetworkName": {
             "value": "NCloudVM_group-vnet"
         },
-        "addressPrefixes": {
-            "value": [
-                "10.0.0.0/24"
-            ]
-        },
-        "subnets": {
-            "value": [
-                {
-                    "name": "default",
-                    "properties": {
-                        "addressPrefix": "10.0.0.0/24"
-                    }
-                }
-            ]
-        },
         "publicIpAddressName": {
             "value": "NCloudVM-ip"
         },
-        "publicIpAddressType": {
-            "value": "Dynamic"
-        },
-        "publicIpAddressSku": {
-            "value": "Basic"
-        },
         "virtualMachineName": {
-            "value": "NCloudVM"
-        },
-        "virtualMachineComputerName": {
             "value": "NCloudVM"
         },
         "virtualMachineRG": {
@@ -77,10 +53,7 @@
             "value": "Username"
         },
         "adminPassword": {
-            "value": "Password"
-        },
-        "patchMode": {
-            "value": "AutomaticByOS"
+            "value": null
         }
     }
 }
