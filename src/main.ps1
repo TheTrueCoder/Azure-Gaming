@@ -11,8 +11,7 @@ $VMStartScript = "startTemplate.ps1"
 
 #------------------------------------/
 
-if ([string]::IsNullOrEmpty($(Get-AzContext).Account)) 
-{Connect-AzAccount}
+if ([string]::IsNullOrEmpty($(Get-AzContext).Account)) {Connect-AzAccount}
 
 # Write-Output "All available Azure locations"
 # (Get-AzLocation).Location

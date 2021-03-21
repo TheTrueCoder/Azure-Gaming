@@ -1,0 +1,5 @@
+# Starts a RDP session to a windows VM.
+Get-AzRemoteDesktopFile -ResourceGroupName -Name -Launch
+
+# Run script on windows VM.
+Invoke-AzVMRunCommand -ResourceGroupName -Name -CommandId 'RunPowerShellScript' -ScriptPath 
