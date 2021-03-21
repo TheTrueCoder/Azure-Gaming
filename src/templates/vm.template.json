@@ -40,6 +40,9 @@
         },
         "adminPassword": {
             "type": "secureString"
+        },
+        "image": {
+            "type": "string"
         }
     },
     "variables": {
@@ -138,7 +141,7 @@
                         }
                     },
                     "imageReference": {
-                        "id": "/subscriptions/50248d07-cf32-4323-be00-c0db0e8eb9f0/resourceGroups/AUS_CloudGaming_Gallery/providers/Microsoft.Compute/galleries/CloudGaming_Gallery/images/LN2-Demo"
+                        "id": "[parameters('image')]"
                     }
                 },
                 "networkProfile": {

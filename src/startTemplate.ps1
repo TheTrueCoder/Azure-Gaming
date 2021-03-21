@@ -1,6 +1,8 @@
 # Define constants
 $Location = "australiaeast"
 $VMName = "NCloudVM"
+$SetupSize = "Standard_B2ms"
+$GPUSize = "Standard_NV6_Promo"
 
 # Check Azure authentication
 if ([string]::IsNullOrEmpty($(Get-AzContext).Account)) {Connect-AzAccount}
@@ -17,16 +19,47 @@ $creds = Get-Credential -Message "Choose your login credentials for the VM"
 # Cloud resources start after here
 # Make Resource Group
 $ResourceGroup = New-AzResourceGroup -Name $VMName -Location $Location
+$RGName = $ResourceGroup.ResourceGroupName
 Write-Output "Resource Group created."
 
 # Make basic VM
 Write-Output "Starting VM. This can take a long time and it has no progress indicator."
-New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroup.ResourceGroupName `
+New-AzResourceGroupDeployment -ResourceGroupName $RGName `
 -TemplateFile .\templates\vm.template.json -TemplateParameterFile .\templates\vm.setup.params.json `
--adminUsername $creds.UserName -adminPassword $creds.Password
+-adminUsername $creds.UserName -adminPassword $creds.Password `
+-virtualMachineSize $SetupSize
 
 Write-Output "A Virtual Machine has been started that can't run games, but is much cheaper, for you to setup you logins and install your game."
 Write-Output "Keep in mind that this VM has nothing related to any previous runs of this script, as all the resources and related data is deleted at the end to save cost."
 
 Read-Host "Press enter when you are ready to connect to your VM."
-Get-AzRemoteDesktopFile -ResourceGroupName $ResourceGroup.ResourceGroupName -Name $VMName -Launch
+Get-AzRemoteDesktopFile -ResourceGroupName $RGName -Name $VMName -Launch
+Write-Output ""
+
+while (1) {
+    Write-Output "gpu-mode, rdp-connect, exit"
+    $response = Read-Host -Prompt "Choose an option"
+
+    if ($response -eq "gpu-mode") {
+        # Shuts down the VM and changes the size to the GPU VM
+        Write-Output "Shutting down VM."
+        Stop-AzVM -ResourceGroupName $RGName -Name $VMName -Force
+        Write-Output "Resizing VM."
+        $vm = Get-AzVM -ResourceGroupName $RGName -VMName $VMName
+        $vm.HardwareProfile.VmSize = $GPUSize
+        Update-AzVM -VM $vm -ResourceGroupName $RGName
+        Write-Output "Starting up the VM."
+        Start-AzVM -ResourceGroupName $RGName -Name $VMName
+        Write-Output "Connect to the VM with RDP to start Parsec."
+    }
+
+    if ($response -eq "rdp-connect") {
+        Get-AzRemoteDesktopFile -ResourceGroupName $RGName -Name $VMName -Launch
+    }
+
+    if ($response -eq "exit") {
+        Write-Output "Always check the azure portal resource groups a couple minutes after this script has ended for leftover resources"
+        Remove-AzResourceGroup -ResourceGroupName $RGName
+        exit
+    }
+}
