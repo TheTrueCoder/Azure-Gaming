@@ -35,7 +35,7 @@ $VMName = Read-Host -Prompt "What do you want to call your VM? (Only alpanumeric
 $GameDiskSizeGB = Read-Host -Prompt "How many GB do you need for your VM Game drive? Nearest power of two recommended."
 $GameDiskSizeGB = [int]$GameDiskSizeGB
 
-#Create Resource Group
+# Create Resource Group
 New-AzResourceGroup -Name $ResourceGroup -Location $Location
 
 while (1) {
@@ -47,7 +47,7 @@ while (1) {
         exit
     }
     elseif ($response -eq "list-vars"){
-        #Lists all variables for debugging
+        # Lists all variables for debugging
         Get-Variable -Scope 0
     }
     elseif ($response -eq "Start Setup VM") {
@@ -55,7 +55,7 @@ while (1) {
         Invoke-Expression -Command $PSScriptRoot/$VMStartScript
     }
     else {
-        #Help message
+        # Help message
         "Available commands:"
         "Main:"
         "   Start Setup VM"

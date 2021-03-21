@@ -1,4 +1,4 @@
-#Source: https://stackoverflow.com/questions/42620986/formatting-a-disk-using-powershell-without-prompting-for-confirmation
+# Source: https://stackoverflow.com/questions/42620986/formatting-a-disk-using-powershell-without-prompting-for-confirmation
 $disk = Get-Disk | where-object PartitionStyle -eq "RAW"  
 Initialize-Disk -Number $disk.Number -PartitionStyle GPT -confirm:$false  
 New-Partition -DiskNumber $disk.Number -UseMaximumSize -IsActive | Format-Volume -FileSystem NTFS -NewFileSystemLabel "Game Disk" -confirm:$False  
