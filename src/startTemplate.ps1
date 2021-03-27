@@ -1,6 +1,8 @@
 # Define constants
 $Location = "australiaeast"
 $VMName = "NCloudVM"
+$ImageID = "/subscriptions/50248d07-cf32-4323-be00-c0db0e8eb9f0/resourceGroups/AUS_CloudGaming/providers/Microsoft.Compute/images/Gaming-Template-Small"
+
 $SetupSize = "Standard_B2ms"
 $GPUSize = "Standard_NV6_Promo"
 
@@ -27,6 +29,7 @@ Write-Output "Starting VM. This can take a long time and it has no progress indi
 New-AzResourceGroupDeployment -ResourceGroupName $RGName `
 -TemplateFile .\templates\vm.template.json -TemplateParameterFile .\templates\vm.setup.params.json `
 -adminUsername $creds.UserName -adminPassword $creds.Password `
+-image $ImageID `
 -virtualMachineSize $SetupSize
 
 Write-Output "A Virtual Machine has been started that can't run games, but is much cheaper, for you to setup you logins and install your game."
