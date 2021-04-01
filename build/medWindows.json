@@ -1,5 +1,8 @@
 {
-"builders": [{
+  "variables": {
+    "resource_group": "{{env `rgName`}}"
+  },
+  "builders": [{
     "type": "azure-arm",
    
    "client_id": "{{user `az_client_id`}}",
@@ -21,7 +24,7 @@
    "winrm_timeout": "5m",
    "winrm_username": "packer",
     
-   "location": "{{user `azure_region`}}",
+   "location": "australiaeast",
    "vm_size": "{{user `vm_size`}}"
   }],
   "provisioners": [{
