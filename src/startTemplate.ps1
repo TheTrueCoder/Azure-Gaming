@@ -24,7 +24,7 @@ $ResourceGroup = New-AzResourceGroup -Name $VMName -Location $Location
 $RGName = $ResourceGroup.ResourceGroupName
 Write-Output "Resource Group created."
 
-# Make basic VM
+# Make basic VM using ARM template
 Write-Output "Starting VM. This can take a long time and it has no progress indicator."
 New-AzResourceGroupDeployment -ResourceGroupName $RGName `
 -TemplateFile .\templates\vm.template.json -TemplateParameterFile .\templates\vm.setup.params.json `
