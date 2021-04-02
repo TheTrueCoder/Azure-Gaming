@@ -1,1 +1,0 @@
-taskkill.exe /IM chrome.exe /F
