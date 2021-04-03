@@ -6,6 +6,8 @@ $ImageID = "/subscriptions/50248d07-cf32-4323-be00-c0db0e8eb9f0/resourceGroups/A
 $SetupSize = "Standard_B2ms"
 $GPUSize = "Standard_NV6_Promo"
 
+$User = "Gaming"
+
 # Check Azure authentication
 if ([string]::IsNullOrEmpty($(Get-AzContext).Account)) {Connect-AzAccount}
 
@@ -16,7 +18,16 @@ Write-Output "And make sure it doesn't contain your username."
 Write-Output "https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/password-must-meet-complexity-requirements"
 
 # Get user credentials
-$creds = Get-Credential -Message "Choose your login credentials for the VM"
+if (Read-Host "Do you want to chose your own login (y/N)?" -eq "y") {
+   $creds = Get-Credential -Message "Choose your login credentials for the VM"
+}
+else {
+    $pswdStr = [system.guid]::NewGuid().tostring().replace('-','').substring(1,18)
+    $PWord = ConvertTo-SecureString -String $pswdStr -AsPlainText -Force
+    $creds = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, $PWord
+    Write-Output "Username: $User" 
+    Write-Output "Password: $pswdStr"
+}
 
 # Cloud resources start after here
 # Make Resource Group
@@ -31,6 +42,7 @@ New-AzResourceGroupDeployment -ResourceGroupName $RGName `
 -adminUsername $creds.UserName -adminPassword $creds.Password `
 -image $ImageID `
 -virtualMachineSize $SetupSize
+
 
 Write-Output "A Virtual Machine has been started that can't run games, but is much cheaper, for you to setup you logins and install your game."
 Write-Output "Keep in mind that this VM has nothing related to any previous runs of this script, as all the resources and related data is deleted at the end to save cost."
