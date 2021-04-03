@@ -34,7 +34,7 @@ $PKR_VAR_vm_size = $vmSize
 
 $text = "y"
 while ($text -eq "y") {
-    packer build -var "resource_group=NCloud_Images" ./medWindows.json
+    packer build ./medWindows.json.pkr.hcl
     $text = Read-Host "Would you like to try again (y/n)?"
 }
 
