@@ -11,22 +11,32 @@ variable "azure_region" {
 
 variable "vm_size" {
   type    = string
-  default = "Standard_DS1_v2"
+  default = "Standard_F2"
 }
 
 source "azure-arm" "windows" {
   subscription_id                   = "${var.az_subscription_id}"
   
-  image_offer                       = "WindowsServer"
-  image_publisher                   = "MicrosoftWindowsServer"
-  image_sku                         = "2019-Datacenter"
+  # image_offer                       = "WindowsServer"
+  # image_publisher                   = "MicrosoftWindowsServer"
+  # image_sku                         = "2019-Datacenter"
   os_type                           = "Windows"
   
-  managed_image_name                = "WindowsServer2019-Pkr"
-  managed_image_resource_group_name = "NCloud_Images"
+  shared_image_gallery {
+    subscription = "${var.az_subscription_id}"
+    resource_group = "AUS_CloudGaming_Gallery"
+    gallery_name = "CloudGaming_Gallery"
+    image_name = "Small-Windows"
+    image_version = "1.0.0"
+}
+
+  managed_image_name                = "Base-Windows"
+  managed_image_resource_group_name = "AUS_CloudGaming"
   
   location                          = "${var.azure_region}"
   vm_size                           = "${var.vm_size}"
+
+  # os_disk_size_gb                   = 32
   
   communicator                      = "winrm"
   winrm_insecure                    = true
@@ -38,6 +48,11 @@ source "azure-arm" "windows" {
 build {
   sources = ["source.azure-arm.windows"]
 
+  # Expand partition for expanded disks
+  provisioner "powershell" {
+    inline = ["$size = Get-PartitionSupportedSize -DriveLetter C", "Resize-Partition -DriveLetter C -Size $size.SizeMax"]
+  }
+
   # Install Chocolatey
   provisioner "powershell" {
     inline = ["Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"]
@@ -45,7 +60,7 @@ build {
 
   # Install Chocolatey Packages
   provisioner "powershell" {
-    inline = ["choco install -y 7zip steam parsec firefox notepadplusplus vb-cable"]
+    inline = ["choco install -y 7zip parsec firefox notepadplusplus vb-cable"]
   }
 
   # Install GRID driver
