@@ -1,9 +1,9 @@
 # Define constants
 $Location = "australiaeast"
 $VMName = "NCloudVM"
-$ImageID = "/subscriptions/50248d07-cf32-4323-be00-c0db0e8eb9f0/resourceGroups/AUS_CloudGaming/providers/Microsoft.Compute/images/Gaming-Template-Small"
+$ImageID = "/subscriptions/50248d07-cf32-4323-be00-c0db0e8eb9f0/resourceGroups/AUS_CloudGaming/providers/Microsoft.Compute/images/CavesRD-CRB"
 
-$SetupSize = "Standard_B2ms"
+$SetupSize = "Standard_F2"
 $GPUSize = "Standard_NV6_Promo"
 
 $User = "Gaming"
@@ -18,11 +18,11 @@ Write-Output "And make sure it doesn't contain your username."
 Write-Output "https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/password-must-meet-complexity-requirements"
 
 # Get user credentials
-if (Read-Host "Do you want to chose your own login (y/N)?" -eq "y") {
+if ((Read-Host "Do you want to chose your own login (y/N)?") -eq "y") {
    $creds = Get-Credential -Message "Choose your login credentials for the VM"
 }
 else {
-    $pswdStr = [system.guid]::NewGuid().tostring().replace('-','').substring(1,18)
+    $pswdStr = "U&M$([system.guid]::NewGuid().tostring().replace('-','').substring(1,15))"
     $PWord = ConvertTo-SecureString -String $pswdStr -AsPlainText -Force
     $creds = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, $PWord
     Write-Output "Username: $User" 
