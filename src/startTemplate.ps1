@@ -2,6 +2,7 @@
 $Location = "australiaeast"
 $VMName = "NCloudVM"
 $ImageID = "/subscriptions/50248d07-cf32-4323-be00-c0db0e8eb9f0/resourceGroups/AUS_CloudGaming_Gallery/providers/Microsoft.Compute/galleries/CloudGaming_Gallery/images/CavesRD-CRB/versions/1.0.0"
+$RGName = $VMName
 
 $SetupSize = "Standard_F2"
 $GPUSize = "Standard_NV6_Promo"
@@ -31,8 +32,7 @@ else {
 
 # Cloud resources start after here
 # Make Resource Group
-$ResourceGroup = New-AzResourceGroup -Name $VMName -Location $Location
-$RGName = $ResourceGroup.ResourceGroupName
+$ResourceGroup = New-AzResourceGroup -Name $RGName -Location $Location
 Write-Output "Resource Group created."
 
 # Make basic VM
