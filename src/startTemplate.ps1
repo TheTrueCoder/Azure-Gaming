@@ -1,7 +1,7 @@
 # Define constants
 $Location = "australiaeast"
 $VMName = "NCloudVM"
-$ImageID = "/subscriptions/50248d07-cf32-4323-be00-c0db0e8eb9f0/resourceGroups/AUS_CloudGaming/providers/Microsoft.Compute/images/CavesRD-CRB"
+$ImageID = "/subscriptions/50248d07-cf32-4323-be00-c0db0e8eb9f0/resourceGroups/AUS_CloudGaming_Gallery/providers/Microsoft.Compute/galleries/CloudGaming_Gallery/images/CavesRD-CRB/versions/1.0.0"
 
 $SetupSize = "Standard_F2"
 $GPUSize = "Standard_NV6_Promo"
