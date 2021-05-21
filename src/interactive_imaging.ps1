@@ -1,11 +1,12 @@
 # Define constants
 $Location = "australiaeast"
 $VMName = "NCloudVM"
-$ImageID = "/subscriptions/50248d07-cf32-4323-be00-c0db0e8eb9f0/resourceGroups/AUS_CloudGaming_Gallery/providers/Microsoft.Compute/galleries/CloudGaming_Gallery/images/CavesRD-CRB/versions/1.0.0"
-$RGName = $VMName
+$SrcImageID = "/subscriptions/50248d07-cf32-4323-be00-c0db0e8eb9f0/resourceGroups/AUS_CloudGaming/providers/Microsoft.Compute/images/Base-Windows"
+
+$DstImageName = "CavesRD-CRB"
+$DstRG = "AUS_CloudGaming"
 
 $SetupSize = "Standard_F2"
-$GPUSize = "Standard_NV6_Promo"
 
 $User = "Gaming"
 
@@ -32,15 +33,16 @@ else {
 
 # Cloud resources start after here
 # Make Resource Group
-$ResourceGroup = New-AzResourceGroup -Name $RGName -Location $Location
+$ResourceGroup = New-AzResourceGroup -Name $VMName -Location $Location
+$RGName = $ResourceGroup.ResourceGroupName
 Write-Output "Resource Group created."
 
-# Make basic VM using ARM template
+# Make basic VM
 Write-Output "Starting VM. This can take a long time and it has no progress indicator."
 New-AzResourceGroupDeployment -ResourceGroupName $RGName `
 -TemplateFile .\templates\vm.template.json -TemplateParameterFile .\templates\vm.setup.params.json `
 -adminUsername $creds.UserName -adminPassword $creds.Password `
--image $ImageID `
+-image $SrcImageID `
 -virtualMachineSize $SetupSize
 
 
@@ -52,20 +54,16 @@ Get-AzRemoteDesktopFile -ResourceGroupName $RGName -Name $VMName -Launch
 Write-Output ""
 
 while (1) {
-    Write-Output "gpu-mode, rdp-connect, exit"
+    Write-Output "image, rdp-connect, exit"
     $response = Read-Host -Prompt "Choose an option"
 
-    if ($response -eq "gpu-mode") {
-        # Shuts down the VM and changes the size to the GPU VM
-        Write-Output "Shutting down VM."
+    if ($response -eq "image") {
+        # Make image
         Stop-AzVM -ResourceGroupName $RGName -Name $VMName -Force
-        Write-Output "Resizing VM."
-        $vm = Get-AzVM -ResourceGroupName $RGName -VMName $VMName
-        $vm.HardwareProfile.VmSize = $GPUSize
-        Update-AzVM -VM $vm -ResourceGroupName $RGName
-        Write-Output "Starting up the VM."
-        Start-AzVM -ResourceGroupName $RGName -Name $VMName
-        Write-Output "Connect to the VM with RDP to start Parsec."
+        Set-AzVM -ResourceGroupName $RGName -Name $VMName -Generalized
+        $vm = Get-AzVM -Name $VMName -ResourceGroupName $RGName
+        $image = New-AzImageConfig -Location $location -SourceVirtualMachineId $vm.Id
+        New-AzImage -Image $image -ImageName $DstImageName -ResourceGroupName $DstRG
     }
 
     if ($response -eq "rdp-connect") {
