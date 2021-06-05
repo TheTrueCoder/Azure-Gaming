@@ -14,6 +14,10 @@ variable "instance_type" {
   description = "Choose type of instance. Valid inputs: [setup, gpu, gpu-promo]"
 }
 
+variable "image_id" {
+  type = string
+}
+
 variable "location" {
   type = string
 }
