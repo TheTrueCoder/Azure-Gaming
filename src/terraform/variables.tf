@@ -22,6 +22,11 @@ variable "location" {
   type = string
 }
 
+variable "subdomain" {
+  type = string
+  default = "azuregaming"
+}
+
 variable "sizes" {
   default = {
     setup = "Standard_B4ms"

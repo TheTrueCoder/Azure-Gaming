@@ -41,33 +41,38 @@ resource "azurerm_subnet" "subnet" {
 }
 
 # Create public IP
+resource "random_integer" "pubip" {
+  min = 1000
+  max = 9999
+}
+
 resource "azurerm_public_ip" "publicip" {
   name                = "${var.appname}-publicIP"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Static"
-  domain_name_label = "azgaming1245"
+  domain_name_label = "${var.subdomain} ${~random_integer.pubip.id}"
 }
-
 
 # Create Network Security Group and rule
-resource "azurerm_network_security_group" "nsg" {
-  name                = "${var.appname}-NSG"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+# I'll revisit this soon to get a firewall configured on the vm
+# resource "azurerm_network_security_group" "nsg" {
+#   name                = "${var.appname}-NSG"
+#   location            = azurerm_resource_group.rg.location
+#   resource_group_name = azurerm_resource_group.rg.name
 
-  security_rule {
-    name                       = "SSH"
-    priority                   = 1001
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "22"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
-}
+#   security_rule {
+#     name                       = "SSH"
+#     priority                   = 1001
+#     direction                  = "Inbound"
+#     access                     = "Allow"
+#     protocol                   = "Tcp"
+#     source_port_range          = "*"
+#     destination_port_range     = "22"
+#     source_address_prefix      = "*"
+#     destination_address_prefix = "*"
+#   }
+# }
 
 # Create network interface
 resource "azurerm_network_interface" "nic" {
@@ -83,7 +88,7 @@ resource "azurerm_network_interface" "nic" {
   }
 }
 
-# Create a Linux virtual machine
+# Create a Windows virtual machine
 resource "azurerm_windows_virtual_machine" "vm" {
   name                  = "${var.appname}-VM"
   location              = azurerm_resource_group.rg.location
@@ -103,8 +108,8 @@ resource "azurerm_windows_virtual_machine" "vm" {
 
 data "azurerm_public_ip" "ip" {
   name                = azurerm_public_ip.publicip.name
-  resource_group_name = azurerm_windows_virtual_machine.vm.resource_group_name
-  depends_on          = [azurerm_windows_virtual_machine.vm]
+  resource_group_name = azurerm_resource_group.rg.name
+  # depends_on          = [azurerm_windows_virtual_machine.vm]
 }
 
 output "public_ip_address" {
