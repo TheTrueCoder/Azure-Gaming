@@ -2,7 +2,7 @@
 terraform {
   required_providers {
     azurerm = {
-      source = "hashicorp/azurerm"
+      source  = "hashicorp/azurerm"
       version = ">= 2.26"
     }
   }
@@ -19,17 +19,17 @@ resource "azurerm_resource_group" "rg" {
   name     = var.appname
   location = var.location
   tags = {
-    App = var.appname
+    App        = var.appname
     ProjectURL = var.projecturl
   }
 }
 
 # Create a virtual network
 resource "azurerm_virtual_network" "vnet" {
-    name                = "${var.appname}-network"
-    address_space       = ["10.0.0.0/16"]
-    location            = azurerm_resource_group.rg.location
-    resource_group_name = azurerm_resource_group.rg.name
+  name                = "${var.appname}-network"
+  address_space       = ["10.0.0.0/16"]
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
 }
 
 # Create subnet
@@ -51,7 +51,7 @@ resource "azurerm_public_ip" "publicip" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Static"
-  domain_name_label = "${var.subdomain} ${~random_integer.pubip.id}"
+  domain_name_label   = "${var.subdomain} ${~random_integer.pubip.id}"
 }
 
 # Create Network Security Group and rule
@@ -76,9 +76,9 @@ resource "azurerm_public_ip" "publicip" {
 
 # Create network interface
 resource "azurerm_network_interface" "nic" {
-  name                      = "${var.appname}-NIC"
-  location                  = azurerm_resource_group.rg.location
-  resource_group_name       = azurerm_resource_group.rg.name
+  name                = "${var.appname}-NIC"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
 
   ip_configuration {
     name                          = "${var.appname}-NICConfig"
@@ -94,9 +94,9 @@ resource "azurerm_windows_virtual_machine" "vm" {
   location              = azurerm_resource_group.rg.location
   resource_group_name   = azurerm_resource_group.rg.name
   network_interface_ids = [azurerm_network_interface.nic.id]
-  size                = lookup(var.sizes, var.instance_type)
-  admin_username      = var.admin_username
-  admin_password      = var.admin_password
+  size                  = lookup(var.sizes, var.instance_type)
+  admin_username        = var.admin_username
+  admin_password        = var.admin_password
 
   os_disk {
     caching              = "ReadWrite"

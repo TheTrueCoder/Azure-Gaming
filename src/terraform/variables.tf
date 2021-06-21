@@ -1,16 +1,16 @@
 variable "admin_username" {
-    type = string
-    description = "Administrator user name for virtual machine"
+  type        = string
+  description = "Administrator user name for virtual machine"
 }
 
 variable "admin_password" {
-    type = string
-    description = "Password must meet Azure complexity requirements"
-    sensitive = true
+  type        = string
+  description = "Password must meet Azure complexity requirements"
+  sensitive   = true
 }
 
 variable "instance_type" {
-  type = string
+  type        = string
   description = "Choose type of instance. Valid inputs: [setup, gpu, gpu-promo]"
 }
 
@@ -23,24 +23,24 @@ variable "location" {
 }
 
 variable "subdomain" {
-  type = string
+  type    = string
   default = "azuregaming"
 }
 
 variable "sizes" {
   default = {
-    setup = "Standard_B4ms"
-    gpu = "Standard_NV6"
+    setup     = "Standard_B4ms"
+    gpu       = "Standard_NV6"
     gpu-promo = "Standard_NV6_Promo"
   }
 }
 
 variable "appname" {
-  type = string
+  type    = string
   default = "Azure-Gaming"
 }
 
 variable "projecturl" {
-  type = string
+  type    = string
   default = "https://github.com/TheTrueCoder/Azure-Gaming"
 }
