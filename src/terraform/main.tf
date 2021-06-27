@@ -106,6 +106,22 @@ resource "azurerm_windows_virtual_machine" "vm" {
   source_image_id = var.image_id
 }
 
+# Provision machine with powershell script
+resource "azurerm_virtual_machine_extension" "software" {
+  name                 = "install-software"
+  resource_group_name  = azurerm_resource_group.azrg.name
+  virtual_machine_id   = azurerm_virtual_machine.vm.id
+  publisher            = "Microsoft.Compute"
+  type                 = "CustomScriptExtension"
+  type_handler_version = "1.9"
+
+  protected_settings = <<SETTINGS
+  {
+     "commandToExecute": "powershell -encodedCommand ${textencodebase64(join("\n", [file("provision.ps1")]), "UTF-16LE")}"
+  }
+  SETTINGS
+}
+
 data "azurerm_public_ip" "ip" {
   name                = azurerm_public_ip.publicip.name
   resource_group_name = azurerm_resource_group.rg.name
