@@ -17,18 +17,10 @@ variable "vm_size" {
 source "azure-arm" "windows" {
   subscription_id                   = "${var.az_subscription_id}"
   
-  # image_offer                       = "WindowsServer"
-  # image_publisher                   = "MicrosoftWindowsServer"
-  # image_sku                         = "2019-Datacenter"
+  image_offer                       = "WindowsServer"
+  image_publisher                   = "MicrosoftWindowsServer"
+  image_sku                         = "2019-Datacenter-smalldisk"
   os_type                           = "Windows"
-  
-  shared_image_gallery {
-    subscription = "${var.az_subscription_id}"
-    resource_group = "AUS_CloudGaming_Gallery"
-    gallery_name = "CloudGaming_Gallery"
-    image_name = "Small-Windows"
-    image_version = "1.0.0"
-}
 
   managed_image_name                = "Base-Windows"
   managed_image_resource_group_name = "AUS_CloudGaming"
