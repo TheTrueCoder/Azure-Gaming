@@ -14,6 +14,11 @@ variable "vm_size" {
   default = "Standard_F2"
 }
 
+variable "gpu_driver_url" {
+  type = string
+  default = "https://go.microsoft.com/fwlink/?linkid=874181"
+}
+
 source "azure-arm" "windows" {
   subscription_id                   = "${var.az_subscription_id}"
   
@@ -57,6 +62,7 @@ build {
 
   # Install GRID driver
   provisioner "powershell" {
+    environment_vars = ["DRIVERURL=${var.gpu_driver_url}"]
     script = "scripts/grid_driver.ps1"
   }
 
