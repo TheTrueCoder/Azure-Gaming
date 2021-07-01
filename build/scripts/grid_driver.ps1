@@ -1,5 +1,8 @@
-mkdir ~\nvdriver
-Set-Location ~\nvdriver
+# Location to download driver files
+$TEMPLOC="~\nvdriver"
+
+mkdir $TEMPLOC
+Set-Location $TEMPLOC
 
 # Download Az supported GRID driver.
 Invoke-WebRequest -Uri $DRIVERURL -OutFile 461.09_grid_server2019_64bit_azure.exe
@@ -14,4 +17,4 @@ PNPUtil.exe /add-driver .\Display.Driver\nvgridsw_azure.inf /install
 
 # Delete install files
 Set-Location ~
-Remove-Item ~\nvdriver -Recurse
+Remove-Item $TEMPLOC -Recurse
