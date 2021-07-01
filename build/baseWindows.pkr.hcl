@@ -19,6 +19,10 @@ variable "gpu_driver_url" {
   default = "https://go.microsoft.com/fwlink/?linkid=874181"
 }
 
+variable "parsec_host_url" {
+  type = string
+}
+
 source "azure-arm" "windows" {
   subscription_id                   = "${var.az_subscription_id}"
   
@@ -57,13 +61,19 @@ build {
 
   # Install Chocolatey Packages
   provisioner "powershell" {
-    inline = ["choco install -y 7zip parsec firefox notepadplusplus vb-cable"]
+    inline = ["choco install -y 7zip firefox notepadplusplus vb-cable"]
   }
 
   # Install GRID driver
   provisioner "powershell" {
     environment_vars = ["DRIVERURL=${var.gpu_driver_url}"]
     script = "scripts/grid_driver.ps1"
+  }
+
+  # Install parsec script
+  provisioner "powershell" {
+    environment_vars = ["INSTALLLOC='C:\parsec'", "ZIPURL=${var.parsec_host_url}"]
+    script = "scripts/parsec_setup.ps1"
   }
 
   # Sysprep
