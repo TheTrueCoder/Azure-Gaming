@@ -21,6 +21,7 @@ variable "gpu_driver_url" {
 
 variable "parsec_host_url" {
   type = string
+  default = "https://github.com/TheTrueCoder/parsec-sdk/releases/download/v0.1.0/parsechost-v0.1.0-win64.zip"
 }
 
 source "azure-arm" "windows" {
@@ -72,7 +73,7 @@ build {
 
   # Install parsec script
   provisioner "powershell" {
-    environment_vars = ["INSTALLLOC='C:\parsec'", "ZIPURL=${var.parsec_host_url}"]
+    environment_vars = ["INSTALLLOC=C:\\parsec", "ZIPURL=${var.parsec_host_url}"]
     script = "scripts/parsec_setup.ps1"
   }
 

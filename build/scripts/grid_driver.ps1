@@ -1,15 +1,18 @@
+$DRIVERURL=$env:DRIVERURL
+
 # Location to download driver files
 $TEMPLOC="~\nvdriver"
+Write-Output "Driverurl: $DRIVERURL"
 
 mkdir $TEMPLOC
 Set-Location $TEMPLOC
 
 # Download Az supported GRID driver.
-Invoke-WebRequest -Uri $DRIVERURL -OutFile 461.09_grid_server2019_64bit_azure.exe
-#wget.exe -O 461.09_grid_server2019_64bit_azure.exe https://go.microsoft.com/fwlink/?linkid=874181
+Invoke-WebRequest -Uri $DRIVERURL -OutFile grid_server2019_64bit_azure.exe
+#wget.exe -O grid_server2019_64bit_azure.exe https://go.microsoft.com/fwlink/?linkid=874181
 
 # Extract Driver package
-7z.exe x .\461.09_grid_server2019_64bit_azure.exe
+7z.exe x .\grid_server2019_64bit_azure.exe
 
 # Install driver silently
 #.\setup.exe -s
