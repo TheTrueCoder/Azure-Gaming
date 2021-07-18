@@ -14,7 +14,7 @@ Invoke-WebRequest -Uri $ZIPURL -OutFile parsecrelease.zip
 
 # Extract Zip package
 mkdir $INSTALLLOC
-7z.exe x -o$INSTALLLOC .\parsecrelease.zip
+Expand-Archive -Path parsecrelease.zip -DestinationPath $INSTALLLOC -Force
 
 # Delete install files
 Set-Location ~
