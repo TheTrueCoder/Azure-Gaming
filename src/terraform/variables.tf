@@ -14,6 +14,11 @@ variable "instance_type" {
   description = "Choose type of instance. Valid inputs: [setup, gpu, gpu-promo]"
 }
 
+variable "parsec_sessionid" {
+  type = string
+  description = "Session ID obtained from Parsec API."
+}
+
 variable "image_id" {
   type = string
 }

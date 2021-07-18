@@ -1,2 +1,9 @@
-echo hello
-echo there
+$PARSEC_SESSIONID=$env:PARSEC_SESSIONID
+
+$PARSECROOT='C:\parsec'
+$PARSECHOST=$PARSECROOT+'host\host.exe'
+
+Write-Output $PARSECHOST
+Write-Output $PARSEC_SESSIONID
+
+Start-Process $PARSECHOST -ArgumentList $PARSEC_SESSIONID

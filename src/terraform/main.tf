@@ -41,7 +41,7 @@ resource "azurerm_subnet" "subnet" {
 }
 
 # Create public IP
-resource "random_integer" "pubip" {
+resource "random_integer" "fqdn" {
   min = 1000
   max = 9999
 }
@@ -51,7 +51,7 @@ resource "azurerm_public_ip" "publicip" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Static"
-  domain_name_label   = "${var.subdomain} ${~random_integer.pubip.id}"
+  domain_name_label   = "${var.subdomain} ${~random_integer.fqdn.id}"
 }
 
 # Create Network Security Group and rule
@@ -107,17 +107,16 @@ resource "azurerm_windows_virtual_machine" "vm" {
 }
 
 # Provision machine with powershell script
-resource "azurerm_virtual_machine_extension" "software" {
-  name                 = "install-software"
-  resource_group_name  = azurerm_resource_group.azrg.name
-  virtual_machine_id   = azurerm_virtual_machine.vm.id
-  publisher            = "Microsoft.Compute"
-  type                 = "CustomScriptExtension"
-  type_handler_version = "1.9"
+resource "azurerm_virtual_machine_extension" "provision" {
+  name                 = "vm-provision"
+  virtual_machine_id   = azurerm_windows_virtual_machine.vm.id
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.1.3"
 
   protected_settings = <<SETTINGS
   {
-     "commandToExecute": "powershell -encodedCommand ${textencodebase64(join("\n", [file("provision.ps1")]), "UTF-16LE")}"
+     "commandToExecute": "powershell -encodedCommand ${textencodebase64(join("\n", ["PARSEC_SESSIONID=${var.parsec_sessionid}", file("provision.ps1")]), "UTF-16LE")}"
   }
   SETTINGS
 }
