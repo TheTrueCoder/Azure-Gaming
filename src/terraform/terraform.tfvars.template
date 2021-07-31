@@ -1,0 +1,4 @@
+# admin_username = ""  # User on Windows VM. You will be asked when you apply by default. Uncomment to use this.
+# admin_password = ""  # Password for Windows VM. Must follow Windows server spec. You will be asked when you apply by default. Uncomment to use this.
+image_id = ""  # Resource ID of image to launch VM from. Either provided to you or from your built images.
+location = ""  # Reigon to launch VM. Must be a reigon that the image is available in.
