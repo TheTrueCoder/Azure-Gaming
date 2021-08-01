@@ -1,9 +1,8 @@
-$PARSEC_SESSIONID=$env:PARSEC_SESSIONID
-
-$PARSECROOT='C:\parsec'
-$PARSECHOST=$PARSECROOT+'host\host.exe'
-
-Write-Output $PARSECHOST
+# Log output
+Start-Transcript -Path 'C:\parsec\provision.log'
 Write-Output $PARSEC_SESSIONID
-
-Start-Process $PARSECHOST -ArgumentList $PARSEC_SESSIONID
+# Start Parsec Host
+Start-Process 'C:\parsec\host\host.exe' -ArgumentList $PARSEC_SESSIONID
+Stop-Transcript
+# Exit with code zero to ensure module succeeds.
+exit 0
