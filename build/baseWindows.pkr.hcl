@@ -11,7 +11,7 @@ variable "azure_region" {
 
 variable "vm_size" {
   type    = string
-  default = "Standard_F2"
+  default = "Standard_B4ms"
 }
 
 variable "gpu_driver_url" {
@@ -50,7 +50,7 @@ source "azure-arm" "windows" {
 build {
   sources = ["source.azure-arm.windows"]
 
-  # Expand partition for expanded disks
+  # Expand partition for expanded disks - Only needed if os_disk_size_gb is set
   provisioner "powershell" {
     inline = ["$size = Get-PartitionSupportedSize -DriveLetter C", "Resize-Partition -DriveLetter C -Size $size.SizeMax"]
   }
