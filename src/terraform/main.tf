@@ -104,25 +104,30 @@ resource "azurerm_windows_virtual_machine" "vm" {
   }
 
   source_image_id = var.image_id
+
+  # provisioner "remote-exec" {
+  #   inline = ["powershell -encodedCommand ${textencodebase64(join("\n", ["$PARSEC_SESSIONID='${var.parsec_sessionid}'", file("provision.ps1")]), "UTF-16LE")}"]
+  # }
 }
 
 # Provision machine with powershell script
-resource "azurerm_virtual_machine_extension" "provision" {
-  name                 = "vm-provision"
-  virtual_machine_id   = azurerm_windows_virtual_machine.vm.id
-  # publisher            = "Microsoft.Azure.Extensions"
-  # type                 = "CustomScript"
-  # type_handler_version = "2.0"
-  publisher            = "Microsoft.Compute"
-  type                 = "CustomScriptExtension"
-  type_handler_version = "1.9"
+# resource "azurerm_virtual_machine_extension" "provision" {
+#   name                 = "vm-provision"
+#   virtual_machine_id   = azurerm_windows_virtual_machine.vm.id
+#   # publisher            = "Microsoft.Azure.Extensions"
+#   # type                 = "CustomScript"
+#   # type_handler_version = "2.0"
+#   publisher            = "Microsoft.Compute"
+#   type                 = "CustomScriptExtension"
+#   type_handler_version = "1.9"
 
-  protected_settings = <<SETTINGS
-  {
-     "commandToExecute": "powershell -encodedCommand ${textencodebase64(join("\n", ["PARSEC_SESSIONID=${var.parsec_sessionid}", file("provision.ps1")]), "UTF-16LE")}"
-  }
-  SETTINGS
-}
+#   protected_settings = <<SETTINGS
+#   {
+#      "commandToExecute": "powershell -credential '${azurerm_windows_virtual_machine.vm.name}\\${azurerm_windows_virtual_machine.vm.admin_username}' -encodedCommand ${textencodebase64(join("\n", ["$PARSEC_SESSIONID='${var.parsec_sessionid}'", file("provision.ps1")]), "UTF-16LE")}"
+#   }
+#   SETTINGS
+# }
+
 
 data "azurerm_public_ip" "ip" {
   name                = azurerm_public_ip.publicip.name
