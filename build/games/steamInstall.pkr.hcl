@@ -1,4 +1,6 @@
-variable "steam_game_id" {}
+variable "steam_game_id" {
+  default = ""
+}
 
 variable "steam_username" {}
 
@@ -48,7 +50,7 @@ build {
   }
 
   provisioner "powershell" {
-    inline = ["mkdir C:\\steam\\games", "C:\\steam\\steamcmd.exe +login ${var.steam_username} ${var.steam_password} +force_install_dir c:\steam\games +app_update ${var.steam_game_id} +quit"]
+    inline = ["mkdir C:\\steam\\games", "C:\\steam\\steamcmd.exe +login ${var.steam_username} ${var.steam_password} +force_install_dir c:\\steam\\games +app_update ${var.steam_game_id} +quit"]
   }
 
   provisioner "powershell" {
