@@ -1,3 +1,11 @@
+# Deprecation Notice
+Azure stopped offering the free $100 a year student accounts to high school students, and they were removing GPU instances from that plan any way, so I would have to pay for the instances myself which is a sugnificant amount of money (around $0.60 USD per hour) not even including the exorbant overpriced egress bandwidth that you need to actually play games. I own a decent computer already, so this project was really just for the fun of messing with this tech. Because of this along with new interests, I'm not really going to keep working on this. If I work on it again though, this message will be removed.
+
+That said, it should still work and you should be able to use it to make gaming VMs easier. Especially the build script.
+You may need to change [the target VM type](https://github.com/TheTrueCoder/Azure-Gaming/blob/main/src/terraform/variables.tf#L33) but otherwise the rest of the instructions should work.
+
+I'm also more than happy to help you get it working if you need help, just make an issue on this repository.
+
 # Azure-Gaming
 A program to automate Gaming on azure Virtual Machines
 
