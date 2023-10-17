@@ -11,7 +11,16 @@ variable "azure_region" {
 
 variable "vm_size" {
   type    = string
-  default = "Standard_F2"
+  default = "Standard_B4ms"
+}
+
+packer {
+  required_plugins {
+    azure = {
+      source  = "github.com/hashicorp/azure"
+      version = "~> 1"
+    }
+  }
 }
 
 source "azure-arm" "windows" {
